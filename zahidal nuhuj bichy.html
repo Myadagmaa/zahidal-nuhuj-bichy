@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Захидлыг гүйцээн бичье - Интерактив хичээл ба тоглоом</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Caveat:wght@600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        hand: ['Caveat', 'cursive'],
+                    },
+                    colors: {
+                        letter: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            500: '#f59e0b',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .letter-paper {
+            background-color: #fefcf3;
+            background-image: radial-gradient(#e5e7eb 0.75px, transparent 0.75px);
+            background-size: 16px 16px;
+        }
+        .stamp-border {
+            border: 2px dashed #b45309;
+        }
+        .card-hover {
+            transition: all 0.25s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.08);
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="text-slate-800 bg-slate-50 min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-white">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="bg-gradient-to-r from-amber-700 via-rose-700 to-indigo-800 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <!-- Logo & Title -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('lesson')">
+                    <div class="bg-white/20 p-2.5 rounded-2xl backdrop-blur-md border border-white/20 flex items-center justify-center shadow-inner text-2xl">
+                        ✉️
+                    </div>
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-black tracking-tight leading-tight">Захидлыг гүйцээн бичье!</h1>
+                        <p class="text-xs text-amber-100 font-medium">Захидлын бүтэц ба үйл явдлын дарааллыг сурах хичээл</p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav class="flex flex-wrap justify-center gap-1.5 bg-black/20 backdrop-blur-md p-1.5 rounded-2xl border border-white/10 text-xs sm:text-sm font-semibold">
+                    <button onclick="switchTab('lesson')" id="nav-lesson" class="tab-btn px-3.5 py-2 rounded-xl transition-all duration-200 bg-white text-amber-900 shadow font-bold">
+                        📚 Хичээл
+                    </button>
+                    <button onclick="switchTab('puzzle')" id="nav-puzzle" class="tab-btn px-3.5 py-2 rounded-xl transition-all duration-200 text-white hover:bg-white/15">
+                        🧩 Дараалал Эвлүүлэх
+                    </button>
+                    <button onclick="switchTab('fill')" id="nav-fill" class="tab-btn px-3.5 py-2 rounded-xl transition-all duration-200 text-white hover:bg-white/15">
+                        ✍️ Нөхөж Бичих
+                    </button>
+                    <button onclick="switchTab('studio')" id="nav-studio" class="tab-btn px-3.5 py-2 rounded-xl transition-all duration-200 text-white hover:bg-white/15">
+                        💌 Захидал Бүтээгч
+                    </button>
+                    <button onclick="switchTab('quiz')" id="nav-quiz" class="tab-btn px-3.5 py-2 rounded-xl transition-all duration-200 text-white hover:bg-white/15">
+                        🏆 Сорил ба Батламж
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
+
+        <!-- ========================================================= -->
+        <!-- TAB 1: LESSON & LETTER STRUCTURE (Хичээл & Бүтэц) -->
+        <!-- ========================================================= -->
+        <section id="tab-lesson" class="tab-content block space-y-8">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-amber-600 via-rose-600 to-indigo-700 p-6 sm:p-10 text-white shadow-xl">
+                <div class="relative z-10 max-w-3xl space-y-4">
+                    <span class="bg-amber-300 text-slate-950 font-black text-xs px-3.5 py-1.5 rounded-full uppercase tracking-wider inline-block shadow-sm">
+                        ✨ Сэдэв: Захидлын бүтэц ба үйл явдал
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-black leading-tight">
+                        "Захидал бол алсад суугаа дотнын хүндээ сэтгэлийн үгээ дайх хамгийн дулаахан гүүр юм."
+                    </h2>
+                    <p class="text-amber-100 text-xs sm:text-sm leading-relaxed">
+                        Захидлыг зөв бичихийн тулд түүний <strong>5 ҮНДСЭН ХЭСЭГ</strong> болон <strong>ҮЙЛ ЯВДЛЫН ЦАГ ХУГАЦААНЫ ДАРААЛЛЫГ</strong> зөв баримтлах хэрэгтэй.
+                    </p>
+                    <div class="pt-2 flex flex-wrap gap-3">
+                        <button onclick="switchTab('puzzle')" class="bg-white text-amber-900 hover:bg-amber-50 font-extrabold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition shadow border border-white/20">
+                            🧩 Тоглоомоор дараалал эвлүүлэх
+                        </button>
+                        <button onclick="switchTab('studio')" class="bg-amber-500/40 hover:bg-amber-500/60 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl backdrop-blur-md transition border border-white/20">
+                            💌 Өөрийн захидлыг бичих
+                        </button>
+                    </div>
+                </div>
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-[220px] font-black pointer-events-none select-none">
+                    ✉️
+                </div>
+            </div>
+
+            <!-- Letter Anatomy Interactive Visual -->
+            <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-800 rounded-2xl flex items-center justify-center text-2xl font-bold">
+                        📌
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-slate-900 text-lg">Захидлын бүтэц гэж юу вэ?</h3>
+                        <p class="text-xs text-slate-500">Захидал нь дараах 5 чухал хэсгээс бүрдэнэ</p>
+                    </div>
+                </div>
+
+                <!-- Sample Interactive Letter View -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                    <!-- Anatomy Diagram -->
+                    <div class="lg:col-span-7 letter-paper p-6 sm:p-8 rounded-2xl border-2 border-amber-200 shadow-inner space-y-4 text-xs sm:text-sm relative">
+                        <!-- Decorative Postal Stamp -->
+                        <div class="absolute top-4 right-4 w-16 h-20 bg-rose-50 stamp-border rounded flex flex-col items-center justify-center text-center p-1 shadow-sm rotate-3">
+                            <span class="text-lg">🇲🇳</span>
+                            <span class="text-[8px] font-bold text-amber-800 mt-1 uppercase">Шуудан</span>
+                        </div>
+
+                        <!-- Part 1 -->
+                        <div class="p-2.5 bg-rose-100/80 rounded-xl border border-rose-300 font-bold text-rose-900 flex justify-between items-center cursor-pointer hover:scale-[1.01] transition">
+                            <span>1. Мэндчилгээ: "Хүндэт эмээ тандаа амар мэндийг эрээн бичье!"</span>
+                            <span class="text-[10px] bg-rose-600 text-white px-2 py-0.5 rounded">Эхлэл</span>
+                        </div>
+
+                        <!-- Part 2 -->
+                        <div class="p-2.5 bg-amber-100/80 rounded-xl border border-amber-300 font-medium text-amber-950 flex justify-between items-center cursor-pointer hover:scale-[1.01] transition">
+                            <span>2. Асуулт / Мэнд мэдэх: "Таны бие сайн байна уу? Бид цөмөөрөө сайн байна."</span>
+                            <span class="text-[10px] bg-amber-600 text-white px-2 py-0.5 rounded">Мэнд</span>
+                        </div>
+
+                        <!-- Part 3 -->
+                        <div class="p-3.5 bg-emerald-100/80 rounded-xl border border-emerald-300 space-y-2 text-emerald-950 cursor-pointer hover:scale-[1.01] transition">
+                            <div class="flex justify-between items-center font-bold text-emerald-900 border-b border-emerald-300 pb-1">
+                                <span>3. Үндсэн хэсэг (Үйл явдлын дараалал):</span>
+                                <span class="text-[10px] bg-emerald-700 text-white px-2 py-0.5 rounded">Гол хэсэг</span>
+                            </div>
+                            <p class="text-xs leading-relaxed italic">
+                                "<strong>Эхлээд,</strong> би сар шинийн баяраар хичээлийнхээ бэлтгэлийг бүрэн хангасан.<br>
+                                <strong>Дараа нь,</strong> сургуулийнхаа математикийн олимпиадад оролцож 2-р байр эзэллээ.<br>
+                                <strong>Эцэст нь,</strong> ирэх амралтаар тан дээрээ очиж туслахаар төлөвлөөд байна!"
+                            </p>
+                        </div>
+
+                        <!-- Part 4 -->
+                        <div class="p-2.5 bg-sky-100/80 rounded-xl border border-sky-300 font-medium text-sky-950 flex justify-between items-center cursor-pointer hover:scale-[1.01] transition">
+                            <span>4. Төгсгөл & Ерөөл: "Ач нь таныгаа маш их санаж байна. Биеэ сайн гамгнаарай!"</span>
+                            <span class="text-[10px] bg-sky-600 text-white px-2 py-0.5 rounded">Ерөөл</span>
+                        </div>
+
+                        <!-- Part 5 -->
+                        <div class="p-2.5 bg-purple-100/80 rounded-xl border border-purple-300 font-bold text-purple-950 flex justify-between items-center cursor-pointer hover:scale-[1.01] transition">
+                            <span>5. Илгээгчийн нэр & Огноо: "Таныг хүндэтгэсэн ач хүү Бат. 2026.10.23"</span>
+                            <span class="text-[10px] bg-purple-600 text-white px-2 py-0.5 rounded">Гарын үсэг</span>
+                        </div>
+                    </div>
+
+                    <!-- Guidance Cards -->
+                    <div class="lg:col-span-5 space-y-3 text-xs">
+                        <div class="p-4 bg-amber-50 rounded-2xl border border-amber-200 text-amber-900 space-y-1.5">
+                            <h4 class="font-black text-sm flex items-center gap-1.5">
+                                <span>⏰</span> <span>Үйл явдлын дараалал гэж юу вэ?</span>
+                            </h4>
+                            <p class="leading-relaxed">
+                                Захидалд болж өнгөрсөн зүйлийг бичихдээ цаг хугацааны дагуу <strong>эхнээс нь төгсгөл хүртэл</strong> нь дараалуулан бичдэг.
+                            </p>
+                        </div>
+
+                        <div class="p-4 bg-emerald-50 rounded-2xl border border-emerald-200 text-emerald-900 space-y-2">
+                            <h4 class="font-black text-sm flex items-center gap-1.5">
+                                <span>🔑</span> <span>Дараалал холбох Түлхүүр үгс:</span>
+                            </h4>
+                            <div class="grid grid-cols-2 gap-2 text-[11px]">
+                                <span class="bg-white px-2.5 py-1.5 rounded-lg border border-emerald-200 font-bold">1. Эхлээд...</span>
+                                <span class="bg-white px-2.5 py-1.5 rounded-lg border border-emerald-200 font-bold">2. Дараа нь...</span>
+                                <span class="bg-white px-2.5 py-1.5 rounded-lg border border-emerald-200 font-bold">3. Тэгээд...</span>
+                                <span class="bg-white px-2.5 py-1.5 rounded-lg border border-emerald-200 font-bold">4. Эцэст нь...</span>
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-indigo-50 rounded-2xl border border-indigo-200 text-indigo-900 space-y-1.5">
+                            <h4 class="font-black text-sm flex items-center gap-1.5">
+                                <span>💡</span> <span>Зөвлөмж:</span>
+                            </h4>
+                            <p class="leading-relaxed">
+                                Захидлаа дуусгахдаа заавал өөрийн нэр болон бичсэн огноогоо (жил, сар, өдөр) баруун доод буланд тодорхой үлдээгээрэй.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAB 2: SEQUENCE PUZZLE GAME (Дараалал Эвлүүлэх) -->
+        <!-- ========================================================= -->
+        <section id="tab-puzzle" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center max-w-3xl mx-auto space-y-3">
+                <span class="bg-amber-100 text-amber-800 font-bold text-xs px-3 py-1 rounded-full uppercase">Интерактив Тоглоом</span>
+                <h2 class="text-2xl font-black text-slate-900">🧩 Захидлын Блок Эвлүүлэг</h2>
+                <p class="text-xs text-slate-600">
+                    Холигдсон захидлын хэсгүүдийг <strong>мэндчилгээнээс эхлээд үйл явдлын дарааллаар нь огноо хүртэл</strong> зөв байранд нь даран сонгож эвлүүлээрэй!
+                </p>
+
+                <!-- Game Stats Bar -->
+                <div class="flex justify-center items-center gap-6 py-2.5 px-4 bg-amber-50/80 rounded-xl max-w-md mx-auto text-xs font-semibold border border-amber-200">
+                    <div>✉️ Даалгавар: <span id="puzzle-level-indicator" class="text-amber-800 font-extrabold">1 / 3</span></div>
+                    <div>⭐ Оноо: <span id="puzzle-score" class="text-emerald-600 font-extrabold">0</span></div>
+                </div>
+            </div>
+
+            <!-- Puzzle Main Workspace -->
+            <div class="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Scrambled Parts Source -->
+                <div class="lg:col-span-6 bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+                    <h3 class="text-xs font-extrabold text-slate-700 flex justify-between items-center border-b pb-2">
+                        <span>📥 Холигдсон хэсгүүд (Дээр нь дарж сонго):</span>
+                    </h3>
+                    <div id="puzzle-scrambled-container" class="space-y-2">
+                        <!-- Dynamic generated -->
+                    </div>
+                </div>
+
+                <!-- Assembled Target Box -->
+                <div class="lg:col-span-6 letter-paper p-6 rounded-2xl border-2 border-amber-300 shadow-inner space-y-4">
+                    <div class="flex justify-between items-center border-b border-amber-200 pb-2">
+                        <span class="text-xs font-black text-amber-900 uppercase tracking-wider">📜 Таны эвлүүлсэн захидал:</span>
+                        <button onclick="resetPuzzleLevel()" class="text-[11px] text-amber-800 hover:text-amber-950 font-bold">🔄 Цэвэрлэх</button>
+                    </div>
+
+                    <div id="puzzle-assembled-container" class="space-y-2 min-h-[220px] flex flex-col justify-center">
+                        <span class="text-xs text-slate-400 italic text-center">Зүүн талын хэсгүүд дээр дарж захидлыг эхнээс нь эвлүүлнэ үү...</span>
+                    </div>
+
+                    <!-- Check Button & Feedback -->
+                    <div class="pt-2 flex flex-col items-end gap-2">
+                        <button id="puzzle-submit-btn" onclick="checkPuzzleSequence()" disabled class="w-full bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white font-extrabold text-xs py-3 rounded-xl shadow transition">
+                            ✅ Захидлын дарааллыг шалгах
+                        </button>
+                    </div>
+
+                    <div id="puzzle-feedback" class="hidden p-3.5 rounded-xl text-xs font-bold"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAB 3: FILL IN THE BLANKS (Нөхөж Бичих Даалгавар) -->
+        <!-- ========================================================= -->
+        <section id="tab-fill" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm text-center max-w-3xl mx-auto space-y-3">
+                <span class="bg-indigo-100 text-indigo-800 font-bold text-xs px-3 py-1 rounded-full uppercase">Дасгал Ажил</span>
+                <h2 class="text-2xl font-black text-slate-900">✍️ Үйл явдлын дарааллыг нөхөж бичих</h2>
+                <p class="text-xs text-slate-600">
+                    Захидлын цэгүүдийн хооронд үйл явдлын дарааллыг заах <strong>тохирох үгсийг</strong> зөв сонгон нөхөөрэй!
+                </p>
+            </div>
+
+            <!-- Letter Fill Exercise Card -->
+            <div class="max-w-3xl mx-auto letter-paper p-6 sm:p-10 rounded-3xl border-2 border-amber-300 shadow-md space-y-6 relative">
+                <!-- Decorative Stamp -->
+                <div class="absolute top-6 right-6 w-16 h-20 bg-rose-100 stamp-border rounded flex flex-col items-center justify-center text-center p-1 shadow-sm rotate-2">
+                    <span class="text-xl">💌</span>
+                    <span class="text-[8px] font-bold text-rose-800 mt-1 uppercase">Захидал</span>
+                </div>
+
+                <div class="text-sm font-bold text-amber-900 border-b border-amber-200 pb-3">
+                    ✉️ Даалгавар: Дараах захидлын дутуу хэсгүүдийг тохирох сонголтоор гүйцээгээрэй.
+                </div>
+
+                <!-- Letter Content with Interactive Selects -->
+                <div class="space-y-4 text-xs sm:text-sm text-slate-800 leading-relaxed font-medium">
+                    <!-- Blank 1: Greeting -->
+                    <div>
+                        <select id="fill-select-1" class="bg-white border-2 border-amber-400 font-extrabold text-amber-900 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="">-- 1. Мэндчилгээ сонгох --</option>
+                            <option value="correct">Хүндэт аав, ээж хоёрдоо амар мэндийг эрээн бичье!</option>
+                            <option value="wrong1">Хөөе найз аа, юу байна даа?</option>
+                            <option value="wrong2">Захидал дууслаа.</option>
+                        </select>
+                    </div>
+
+                    <!-- Intro -->
+                    <p>
+                        Та хоёр минь сайн сууж байна уу? Би зусланд ирээд аль хэдийн 5 хонож байна. Энд агаар сайхан, их гоё байна. Өнгөрсөн өдрүүдэд болсон үйл явдлыг та хоёрдоо ярьж өгье.
+                    </p>
+
+                    <!-- Blank 2: Event 1 Transition -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <select id="fill-select-2" class="bg-white border-2 border-amber-400 font-bold text-amber-900 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="">-- 2. Эхний холбоос үг --</option>
+                            <option value="correct">Эхний өдөр,</option>
+                            <option value="wrong1">Төгсгөлд нь,</option>
+                            <option value="wrong2">Өнгөрсөн жилд,</option>
+                        </select>
+                        <span>бид шинэ асраа барьж, багийнхантайгаа танилцсан.</span>
+                    </div>
+
+                    <!-- Blank 3: Event 2 Transition -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <select id="fill-select-3" class="bg-white border-2 border-amber-400 font-bold text-amber-900 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="">-- 3. Дараагийн холбоос үг --</option>
+                            <option value="wrong1">Эхлээд,</option>
+                            <option value="correct">Дараагийн өдөр нь,</option>
+                            <option value="wrong2">Одоо,</option>
+                        </select>
+                        <span>уулын оргил руу аялж, ховор ургамлын зураг цуглуулсан.</span>
+                    </div>
+
+                    <!-- Blank 4: Event 3 Transition -->
+                    <div class="flex flex-wrap items-center gap-2">
+                        <select id="fill-select-4" class="bg-white border-2 border-amber-400 font-bold text-amber-900 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="">-- 4. Сүүлийн холбоос үг --</option>
+                            <option value="wrong1">Маргааш,</option>
+                            <option value="wrong2">Эхлээд,</option>
+                            <option value="correct">Эцэст нь,</option>
+                        </select>
+                        <span>бид бүгдээрээ түүдэг гал асааж, дуу дуулан үдшийг хөгжилтэй өнгөрөөлөө.</span>
+                    </div>
+
+                    <!-- Outro & Blank 5: Closing -->
+                    <div class="space-y-2 pt-2">
+                        <p>Та хоёр минь биеэ сайн гамгнаж, дараагийн захидлыг минь хүлээгээрэй.</p>
+                        <select id="fill-select-5" class="bg-white border-2 border-amber-400 font-extrabold text-amber-900 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                            <option value="">-- 5. Төгсгөлийн гарын үсэг сонгох --</option>
+                            <option value="wrong1">Баяртай залуусаа!</option>
+                            <option value="correct">Та хоёрдоо хайртай хүү Анар нь. 2026.10.23</option>
+                            <option value="wrong2">Би одоо унтлаа.</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Submit Button & Result -->
+                <div class="pt-4 border-t border-amber-200 flex flex-col items-center gap-3">
+                    <button onclick="checkFillAnswers()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold text-xs px-8 py-3 rounded-xl shadow transition">
+                        🔍 Хариултуудыг шалгах
+                    </button>
+                    <div id="fill-feedback" class="hidden w-full p-4 rounded-xl text-xs font-bold text-center"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAB 4: LETTER BUILDER STUDIO (Миний Захидал Бүтээгч) -->
+        <!-- ========================================================= -->
+        <section id="tab-studio" class="tab-content hidden space-y-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                <span class="bg-rose-100 text-rose-800 font-bold text-xs px-3 py-1 rounded-full uppercase">Бүтээлч Студи</span>
+                <h2 class="text-2xl font-black text-slate-900">💌 Миний Захидал Бүтээгч</h2>
+                <p class="text-xs text-slate-600">
+                    Асуултуудад хариулан захидлын бүтцээ бэлдэж, үйл явдлын дараалалтай жинхэнэ захидал бүтээгээрэй!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                <!-- Form Inputs -->
+                <div class="lg:col-span-6 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 text-xs">
+                    <h3 class="font-black text-sm text-slate-800 border-b pb-2">✏️ Захидлын мэдээлэл оруулах:</h3>
+
+                    <!-- Recipient & Greeting -->
+                    <div class="space-y-1.5">
+                        <label class="font-extrabold text-slate-700 block">1. Хэнд захидал бичих вэ? (Мэндчилгээ):</label>
+                        <input type="text" id="studio-recipient" placeholder="Жишээ: Хүндэт багш тандаа / Хайрт багшдаа..." oninput="updateStudioPreview()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    </div>
+
+                    <!-- Intro Question -->
+                    <div class="space-y-1.5">
+                        <label class="font-extrabold text-slate-700 block">2. Эхлэл хэсэг (Асуулт, биеийн амгалан эрэх):</label>
+                        <input type="text" id="studio-intro" placeholder="Таны бие сайн байна уу? Бид бүгдээрээ хичээлээ сайн хийж байна." oninput="updateStudioPreview()" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    </div>
+
+                    <hr class="border-slate-200">
+
+                    <!-- Sequential Events -->
+                    <div class="space-y-3">
+                        <span class="font-black text-slate-800 block text-xs">3. Үйл явдлын дараалал (Юу болсон тухай бичих):</span>
+                        
+                        <div class="space-y-1">
+                            <label class="font-bold text-amber-800 block">🔹 Эхлээд юу болсон бэ?</label>
+                            <input type="text" id="studio-event1" placeholder="Эхлээд, бид сургуулийнхаа номын баяраар олон ном уншсан." oninput="updateStudioPreview()" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="font-bold text-amber-800 block">🔹 Дараа нь юу болсон бэ?</label>
+                            <input type="text" id="studio-event2" placeholder="Дараа нь, манай анги урлагийн үзлэгт оролцож 1-р байр эзэлсэн." oninput="updateStudioPreview()" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="font-bold text-amber-800 block">🔹 Эцэст нь юу болсон бэ?</label>
+                            <input type="text" id="studio-event3" placeholder="Эцэст нь, бид хамтдаа баярын ширээ засаж тэмдэглэсэн." oninput="updateStudioPreview()" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                        </div>
+                    </div>
+
+                    <hr class="border-slate-200">
+
+                    <!-- Ending & Sender -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div class="space-y-1.5">
+                            <label class="font-extrabold text-slate-700 block">4. Ерөөл, захиас:</label>
+                            <input type="text" id="studio-wishes" placeholder="Та заавал хариу бичээрэй. Эрүүл энхийг хүсье!" oninput="updateStudioPreview()" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                        </div>
+                        <div class="space-y-1.5">
+                            <label class="font-extrabold text-slate-700 block">5. Илгээгч & Огноо:</label>
+                            <input type="text" id="studio-sender" placeholder="Хүндэтгэсэн: Болд. 2026.10.23" oninput="updateStudioPreview()" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Letter Preview Card -->
+                <div class="lg:col-span-6 space-y-4">
+                    <div class="letter-paper p-6 sm:p-8 rounded-3xl border-2 border-amber-300 shadow-md space-y-5 text-slate-900 relative">
+                        <!-- Postal Stamp -->
+                        <div class="absolute top-6 right-6 w-16 h-20 bg-amber-100 stamp-border rounded flex flex-col items-center justify-center text-center p-1 shadow-sm rotate-3">
+                            <span class="text-xl">🕊️</span>
+                            <span class="text-[8px] font-bold text-amber-900 mt-1 uppercase">Захидал</span>
+                        </div>
+
+                        <!-- Header -->
+                        <div id="prev-recipient" class="font-extrabold text-base text-amber-900">
+                            [ Хэнд: Захидал авах хүний мэндчилгээ... ]
+                        </div>
+
+                        <!-- Body -->
+                        <div class="space-y-3 text-xs sm:text-sm leading-relaxed font-medium text-slate-800">
+                            <p id="prev-intro" class="italic text-slate-600">[ Эхлэл хэсэг: Биеийн амгалан эрэх... ]</p>
+                            
+                            <div class="p-3 bg-white/70 rounded-xl border border-amber-200/80 space-y-1">
+                                <p id="prev-event1" class="text-amber-950">[ 1. Эхний үйл явдал... ]</p>
+                                <p id="prev-event2" class="text-amber-950">[ 2. Дараагийн үйл явдал... ]</p>
+                                <p id="prev-event3" class="text-amber-950">[ 3. Сүүлийн үйл явдал... ]</p>
+                            </div>
+
+                            <p id="prev-wishes" class="font-bold text-rose-900">[ Ерөөл ба хүсэлт... ]</p>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="pt-4 border-t border-amber-200 flex justify-end">
+                            <div id="prev-sender" class="text-right text-xs font-black text-amber-950">
+                                [ Илгээгчийн нэр & Огноо ]
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Print Button -->
+                    <button onclick="window.print()" class="w-full bg-slate-800 hover:bg-slate-900 text-white font-extrabold text-xs py-3 rounded-xl shadow transition flex items-center justify-center space-x-2">
+                        <span>🖨️ Захидлаа хэвлэж авах / Хадгалах</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- TAB 5: QUIZ & CERTIFICATE (Сорил ба Батламж) -->
+        <!-- ========================================================= -->
+        <section id="tab-quiz" class="tab-content hidden space-y-6">
+            <div class="max-w-3xl mx-auto space-y-6">
+                <!-- Quiz Container -->
+                <div id="quiz-box" class="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-slate-200 space-y-6">
+                    <div class="flex items-center justify-between border-b pb-4">
+                        <div>
+                            <span class="text-xs font-bold text-amber-600 uppercase tracking-wider">Мэдлэг шалгах сорил</span>
+                            <h2 class="text-xl font-black text-slate-900">Захидал бичих ур чадварын тест</h2>
+                        </div>
+                        <div class="text-right">
+                            <span id="quiz-progress" class="text-xs font-bold text-slate-400">Асуулт 1 / 5</span>
+                        </div>
+                    </div>
+
+                    <!-- Question Text -->
+                    <div class="space-y-2">
+                        <h3 id="quiz-question-text" class="text-base sm:text-lg font-bold text-slate-800">
+                            Асуулт уншиж байна...
+                        </h3>
+                    </div>
+
+                    <!-- Options Grid -->
+                    <div id="quiz-options" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <!-- Dynamic options -->
+                    </div>
+
+                    <!-- Feedback Msg -->
+                    <div id="quiz-feedback" class="hidden p-3.5 rounded-xl text-xs font-bold"></div>
+
+                    <!-- Next Button -->
+                    <div class="flex justify-end pt-2">
+                        <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden bg-amber-600 hover:bg-amber-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs transition shadow">
+                            Дараагийн асуулт ➔
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Certificate Box -->
+                <div id="certificate-box" class="hidden bg-white p-8 rounded-3xl shadow-xl border-4 border-amber-200 text-center space-y-6 relative overflow-hidden">
+                    <div class="inline-block p-3 bg-amber-100 text-amber-800 rounded-2xl text-4xl shadow-inner">
+                        📜
+                    </div>
+
+                    <div class="space-y-2">
+                        <span class="text-xs font-extrabold text-amber-600 tracking-widest uppercase block">БАТЛАМЖ ЖУОМ</span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-slate-900">"ЗАХИДАЛ БИЧИГЧ МАСТЕР" СЕРТИФИКАТ</h2>
+                        <p class="text-xs text-slate-500 max-w-md mx-auto">
+                            Та захидлын бүтцийг зөв ойлгож, үйл явдлын дарааллаар логиктой бичих хичээлийг амжилттай дүүргэлээ!
+                        </p>
+                    </div>
+
+                    <div class="max-w-md mx-auto bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2 text-xs">
+                        <label class="block font-bold text-slate-700 text-left">Сурагчийн нэр:</label>
+                        <input type="text" id="cert-student-name" placeholder="Өөрийн нэрийг бичээрэй..." class="w-full px-3.5 py-2 rounded-xl border text-sm font-bold border-slate-300 text-center focus:ring-2 focus:ring-amber-500 focus:outline-none" oninput="updateCertName()">
+                    </div>
+
+                    <!-- Certificate Printable Area -->
+                    <div class="p-6 bg-gradient-to-b from-amber-50 via-rose-50 to-indigo-50 border-2 border-dashed border-amber-300 rounded-2xl max-w-lg mx-auto space-y-3 text-slate-800 shadow-inner">
+                        <div class="text-xs text-amber-800 font-semibold uppercase tracking-wider">Энэхүү батламжийг</div>
+                        <div id="cert-display-name" class="text-2xl font-black text-indigo-950 border-b-2 border-amber-400 pb-1 inline-block px-6">
+                            [ Сурагчийн нэр ]
+                        </div>
+                        <p class="text-[11px] text-slate-600 italic leading-relaxed">
+                            Захидлын бүтэц ба үйл явдлын цаг хугацааны дарааллыг зөв эвлүүлэх шалгалтад <span id="cert-score-display" class="font-bold text-emerald-600">100%</span> оноо авч амжилттай оролцсоныг батлав.
+                        </p>
+                        <div class="flex justify-between items-center text-[10px] text-slate-400 pt-2 border-t border-amber-200">
+                            <span>📅 Огноо: <span id="cert-date">2026.10.23</span></span>
+                            <span>🏫 Эх хэлний хичээл</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-center gap-3">
+                        <button onclick="window.print()" class="bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs px-5 py-2.5 rounded-xl shadow transition">
+                            🖨️ Сертификат хэвлэх
+                        </button>
+                        <button onclick="restartQuiz()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-5 py-2.5 rounded-xl transition">
+                            🔄 Шалгалтыг дахин өгөх
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p class="font-medium">"Захидлыг гүйцээн бичье" - Эх хэл, найруулга ба бичгийн чадварын интерактив хичээл</p>
+            <p class="text-[11px] text-slate-500">Мэндчилгээнээс эхлээд гарын үсэг хүртэл - Зөв бүтцээр захидлаа бичицгээе.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Web Audio API Sound Effects Engine
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                gain.gain.setValueAtTime(0.04, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+                osc.start(now);
+                osc.stop(now + 0.04);
+            } else if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.16); // G5
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.setValueAtTime(180, now + 0.08);
+                gain.gain.setValueAtTime(0.08, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+                osc.start(now);
+                osc.stop(now + 0.22);
+            } else if (type === 'win') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(523.25, now);
+                osc.frequency.setValueAtTime(659.25, now + 0.1);
+                osc.frequency.setValueAtTime(783.99, now + 0.2);
+                osc.frequency.setValueAtTime(1046.50, now + 0.3);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            }
+        }
+
+        // PUZZLE LEVELS DATA
+        const PUZZLE_LEVELS = [
+            {
+                level: 1,
+                parts: [
+                    { id: 'p1', type: 'Мэндчилгээ', text: 'Хүндэт эмээ тандаа амар мэндийг эрээн бичье!' },
+                    { id: 'p2', type: 'Мэнд мэдэх', text: 'Таныхаа биеийг сайн байгаа гэж найдаж байна. Бид сайн сууна.' },
+                    { id: 'p3', type: 'Үйл явдал 1', text: 'Эхлээд, бид сургуулийнхаа урлагийн наадамд зориулж бүжиг бэлдсэн.' },
+                    { id: 'p4', type: 'Үйл явдал 2', text: 'Дараа нь, тэмцээний өдөр үзүүлбэрээ үзүүлж 1-р байранд орж чадлаа.' },
+                    { id: 'p5', type: 'Ерөөл', text: 'Биеэ сайн гамгнаарай эмээ минь. Дараагийн амралтаар тан дээрээ очно оо.' },
+                    { id: 'p6', type: 'Огноо, нэр', text: 'Ач охин Болормаа нь. 2026 оны 10 сарын 23' }
+                ]
+            },
+            {
+                level: 2,
+                parts: [
+                    { id: 'p1', type: 'Мэндчилгээ', text: 'Сайн уу, найз Бат аа!' },
+                    { id: 'p2', type: 'Мэнд мэдэх', text: 'Шинэ сургууль нь сонирхолтой байна уу? Чамдаа энэ долоо хоногт болсон явдлыг бичье.' },
+                    { id: 'p3', type: 'Үйл явдал 1', text: 'Эхний өдөр, манай ангид шинэ сурагч шилжиж ирж бидэнтэй найзалсан.' },
+                    { id: 'p4', type: 'Үйл явдал 2', text: 'Тэгээд, бид хоёр хамтдаа сагсан бөмбөгийн тэмцээнд орж хүрэл медаль авлаа.' },
+                    { id: 'p5', type: 'Ерөөл', text: 'Чамд амжилт хүсье. Чөлөөтэй болохоороо заавал хариу захидал бичээрэй.' },
+                    { id: 'p6', type: 'Огноо, нэр', text: 'Тантай нөхөрлөсөн Дулмаа. 2026.10.23' }
+                ]
+            }
+        ];
+
+        // QUIZ QUESTIONS DATA
+        const QUIZ_QUESTIONS = [
+            {
+                question: "Захидлын хамгийн эхэнд юуг бичдэг вэ?",
+                options: [
+                    "Илгээгчийн нэр ба огноо",
+                    "Мэндчилгээ (Хүндэт аавдаа / Сайн уу...)",
+                    "Төгсгөлийн ерөөл",
+                    "Үйл явдлын сүүлчийн хэсэг"
+                ],
+                correct: 1,
+                explanation: "Захидал нь заавал хүлээн авагчид зориулсан хүндэтгэлийн мэндчилгээнээс эхэлдэг."
+            },
+            {
+                question: "Захидалд үйл явдлыг бичихдээ ямар дарааллыг баримтлах ёстой вэ?",
+                options: [
+                    "Хамгийн сүүлд болсон зүйлийг эхэнд нь бичнэ",
+                    "Ямар ч дараалалгүй холиод бичнэ",
+                    "Эхнээс нь төгсгөл хүртэл цаг хугацааны зөв дарааллаар бичнэ",
+                    "Зөвхөн асуулт асууна"
+                ],
+                correct: 2,
+                explanation: "Үйл явдлыг цаг хугацааны дарааллаар (Эхлээд, Дараа нь, Эцэст нь...) бичвэл уншихад ойлгомжтой байдаг."
+            },
+            {
+                question: "Дараах үгсийн али нь үйл явдлын ДАРААГИЙН алхмыг холбох түлхүүр үг вэ?",
+                options: [
+                    "Хүндэт...",
+                    "Дараа нь / Тэгээд...",
+                    "Баяртай...",
+                    "2026 он..."
+                ],
+                correct: 1,
+                explanation: "'Дараа нь', 'Тэгээд' гэх үгс нь эхний үйл явдлын араас үргэлжлэх дарааллыг илэрхийлнэ."
+            },
+            {
+                question: "Захидлын хамгийн баруун доод буланд юуг заавал бичдэг вэ?",
+                options: [
+                    "Захидал бичсэн огноо ба өөрийн нэр",
+                    "Хүлээн авагчийн утасны номер",
+                    "Агаарын температур",
+                    "Хичээлийн хуваарь"
+                ],
+                correct: 0,
+                explanation: "Захидлын төгсгөлд хэзээ бичсэн огноо болон хэн бичсэн нэрээ үлдээх нь захидлын соёл юм."
+            },
+            {
+                question: "'Таны бие сайн байна уу? Бид цөмөөрөө сайн байна.' гэдэг нь захидлын ямар хэсэг вэ?",
+                options: [
+                    "Огноо ба гарын үсэг",
+                    "Мэнд мэдэх / Эхлэл хэсэг",
+                    "Захидлын дугтуй",
+                    "Төгсгөлийн ерөөл"
+                ],
+                correct: 1,
+                explanation: "Энэ нь захидал хүлээн авагчийн амар мэндийг асууж буй эхлэл хэсэг юм."
+            }
+        ];
+
+        // GLOBAL STATE
+        let currentPuzzleLevelIndex = 0;
+        let currentPuzzleScore = 0;
+        let currentAssembledPuzzle = [];
+        let currentScrambledPuzzle = [];
+
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        // INITIALIZATION
+        window.onload = function() {
+            loadPuzzleLevel(0);
+            updateStudioPreview();
+            startQuiz();
+        };
+
+        // TAB NAVIGATION
+        function switchTab(tabId) {
+            playSound('click');
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-amber-900', 'shadow', 'font-bold');
+                btn.classList.add('text-white', 'hover:bg-white/15');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.add('bg-white', 'text-amber-900', 'shadow', 'font-bold');
+                activeNav.classList.remove('text-white', 'hover:bg-white/15');
+            }
+        }
+
+        // =========================================================
+        // PUZZLE GAME LOGIC
+        // =========================================================
+        function loadPuzzleLevel(levelIdx) {
+            currentPuzzleLevelIndex = levelIdx;
+            const lvl = PUZZLE_LEVELS[currentPuzzleLevelIndex];
+
+            document.getElementById('puzzle-level-indicator').innerText = `${lvl.level} / ${PUZZLE_LEVELS.length}`;
+            currentAssembledPuzzle = [];
+
+            // Shuffle level parts
+            currentScrambledPuzzle = [...lvl.parts].sort(() => 0.5 - Math.random());
+
+            renderPuzzleScrambled();
+            renderPuzzleAssembled();
+
+            document.getElementById('puzzle-feedback').className = "hidden p-3.5 rounded-xl text-xs font-bold";
+            document.getElementById('puzzle-submit-btn').disabled = true;
+        }
+
+        function renderPuzzleScrambled() {
+            const container = document.getElementById('puzzle-scrambled-container');
+            container.innerHTML = '';
+
+            currentScrambledPuzzle.forEach((part) => {
+                const isSelected = currentAssembledPuzzle.some(p => p.id === part.id);
+
+                const btn = document.createElement('button');
+                btn.disabled = isSelected;
+                btn.className = `w-full text-left p-3 rounded-xl border text-xs transition flex items-center justify-between ${
+                    isSelected 
+                    ? 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed opacity-40' 
+                    : 'bg-white hover:bg-amber-50 text-slate-800 border-slate-200 shadow-sm hover:border-amber-300 font-medium'
+                }`;
+                btn.onclick = () => selectPuzzlePart(part);
+                btn.innerHTML = `
+                    <span class="leading-relaxed">${part.text}</span>
+                    <span class="text-amber-700 font-extrabold text-sm ml-2">${isSelected ? '✓' : '+'}</span>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function selectPuzzlePart(part) {
+            playSound('click');
+            if (!currentAssembledPuzzle.some(p => p.id === part.id)) {
+                currentAssembledPuzzle.push(part);
+                renderPuzzleScrambled();
+                renderPuzzleAssembled();
+
+                if (currentAssembledPuzzle.length === PUZZLE_LEVELS[currentPuzzleLevelIndex].parts.length) {
+                    document.getElementById('puzzle-submit-btn').disabled = false;
+                }
+            }
+        }
+
+        function deselectPuzzlePart(idx) {
+            playSound('click');
+            currentAssembledPuzzle.splice(idx, 1);
+            renderPuzzleScrambled();
+            renderPuzzleAssembled();
+            document.getElementById('puzzle-submit-btn').disabled = true;
+        }
+
+        function renderPuzzleAssembled() {
+            const container = document.getElementById('puzzle-assembled-container');
+            if (currentAssembledPuzzle.length === 0) {
+                container.innerHTML = `<span class="text-xs text-slate-400 italic text-center">Зүүн талын хэсгүүд дээр дарж захидлыг эхнээс нь эвлүүлнэ үү...</span>`;
+                return;
+            }
+
+            container.innerHTML = '';
+            currentAssembledPuzzle.forEach((part, idx) => {
+                const item = document.createElement('div');
+                item.className = "flex items-start justify-between p-2.5 bg-white border border-amber-200 rounded-xl text-xs font-semibold text-amber-950 animate-fade-in shadow-sm";
+                item.innerHTML = `
+                    <div class="flex items-start space-x-2">
+                        <span class="w-5 h-5 bg-amber-600 text-white rounded-full flex items-center justify-center text-[10px] font-black flex-shrink-0 mt-0.5">${idx + 1}</span>
+                        <div>
+                            <span class="text-[9px] bg-amber-100 text-amber-800 font-bold px-1.5 py-0.5 rounded mr-1">${part.type}</span>
+                            <span>${part.text}</span>
+                        </div>
+                    </div>
+                    <button onclick="deselectPuzzlePart(${idx})" class="text-rose-500 hover:text-rose-700 font-extrabold px-1 text-xs">✕</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function resetPuzzleLevel() {
+            playSound('click');
+            loadPuzzleLevel(currentPuzzleLevelIndex);
+        }
+
+        function checkPuzzleSequence() {
+            const lvl = PUZZLE_LEVELS[currentPuzzleLevelIndex];
+            const feedback = document.getElementById('puzzle-feedback');
+            
+            let isCorrect = true;
+            for (let i = 0; i < lvl.parts.length; i++) {
+                if (currentAssembledPuzzle[i].id !== lvl.parts[i].id) {
+                    isCorrect = false;
+                    break;
+                }
+            }
+
+            if (isCorrect) {
+                playSound('win');
+                currentPuzzleScore += 100;
+                document.getElementById('puzzle-score').innerText = currentPuzzleScore;
+
+                feedback.className = "p-3.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-900 border border-emerald-300 block space-y-2";
+                feedback.innerHTML = `
+                    <div class="text-sm font-black text-emerald-800">🎉 Баяр хүргэе! Эвлүүлэг зөв байна!</div>
+                    <p>Захидлын бүтэц болон үйл явдлын дараалал тун зөв боллоо! +100 оноо авав.</p>
+                    ${currentPuzzleLevelIndex < PUZZLE_LEVELS.length - 1 ? `
+                        <button onclick="loadPuzzleLevel(currentPuzzleLevelIndex + 1)" class="mt-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-4 py-2 rounded-xl text-xs shadow transition">
+                            Дараагийн даалгавар ➔
+                        </button>
+                    ` : `
+                        <p class="font-extrabold text-amber-900">🏆 Та бүх захидлын дарааллыг амжилттай эвлүүллээ!</p>
+                    `}
+                `;
+            } else {
+                playSound('wrong');
+                feedback.className = "p-3.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-900 border border-rose-300 block space-y-2";
+                feedback.innerHTML = `
+                    <div class="text-sm font-black text-rose-800">⚠️ Буруу дараалал байна!</div>
+                    <p>Захидлын бүтэц (Мэндчилгээ ➔ Мэнд ➔ Үйл явдал ➔ Ерөөл ➔ Огноо) буруу эсвэл үйл явдлын дараалал зөрүүтэй байна. Ахиад нэг оролдоорой!</p>
+                `;
+            }
+        }
+
+        // =========================================================
+        // FILL IN BLANKS LOGIC
+        // =========================================================
+        function checkFillAnswers() {
+            const s1 = document.getElementById('fill-select-1').value;
+            const s2 = document.getElementById('fill-select-2').value;
+            const s3 = document.getElementById('fill-select-3').value;
+            const s4 = document.getElementById('fill-select-4').value;
+            const s5 = document.getElementById('fill-select-5').value;
+
+            const feedback = document.getElementById('fill-feedback');
+
+            if (s1 === 'correct' && s2 === 'correct' && s3 === 'correct' && s4 === 'correct' && s5 === 'correct') {
+                playSound('win');
+                feedback.className = "p-4 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-900 border border-emerald-300 block space-y-1";
+                feedback.innerHTML = `
+                    <div class="text-sm font-black text-emerald-800">✨ Онц сайн! Бүх дутуу хэсгийг зөв нөхлөө!</div>
+                    <p>Захидлын мэндчилгээ, үйл явдлын холбоос үгс болон гарын үсгийг яг байранд нь тохирууллаа.</p>
+                `;
+            } else {
+                playSound('wrong');
+                feedback.className = "p-4 rounded-xl text-xs font-bold bg-rose-50 text-rose-900 border border-rose-300 block space-y-1";
+                feedback.innerHTML = `
+                    <div class="text-sm font-black text-rose-800">⚠️ Зарим сонголт буруу байна!</div>
+                    <p>Мэндчилгээ болон үйл явдлын холбоос үгсээ (Эхлээд, Дараа нь, Эцэст нь) дахин нэг нягталж сонгоорой.</p>
+                `;
+            }
+        }
+
+        // =========================================================
+        // LETTER BUILDER STUDIO LOGIC
+        // =========================================================
+        function updateStudioPreview() {
+            const rec = document.getElementById('studio-recipient').value.trim();
+            const intro = document.getElementById('studio-intro').value.trim();
+            const e1 = document.getElementById('studio-event1').value.trim();
+            const e2 = document.getElementById('studio-event2').value.trim();
+            const e3 = document.getElementById('studio-event3').value.trim();
+            const wishes = document.getElementById('studio-wishes').value.trim();
+            const sender = document.getElementById('studio-sender').value.trim();
+
+            document.getElementById('prev-recipient').innerText = rec !== '' ? rec : '[ Хэнд: Захидал авах хүний мэндчилгээ... ]';
+            document.getElementById('prev-intro').innerText = intro !== '' ? intro : '[ Эхлэл хэсэг: Биеийн амгалан эрэх... ]';
+            document.getElementById('prev-event1').innerText = e1 !== '' ? e1 : '[ 1. Эхний үйл явдал... ]';
+            document.getElementById('prev-event2').innerText = e2 !== '' ? e2 : '[ 2. Дараагийн үйл явдал... ]';
+            document.getElementById('prev-event3').innerText = e3 !== '' ? e3 : '[ 3. Сүүлийн үйл явдал... ]';
+            document.getElementById('prev-wishes').innerText = wishes !== '' ? wishes : '[ Ерөөл ба хүсэлт... ]';
+            document.getElementById('prev-sender').innerText = sender !== '' ? sender : '[ Илгээгчийн нэр & Огноо ]';
+        }
+
+        // =========================================================
+        // QUIZ & CERTIFICATE LOGIC
+        // =========================================================
+        function startQuiz() {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-box').classList.remove('hidden');
+            document.getElementById('certificate-box').classList.add('hidden');
+            loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+            const q = QUIZ_QUESTIONS[currentQuizIndex];
+            document.getElementById('quiz-progress').innerText = `Асуулт ${currentQuizIndex + 1} / ${QUIZ_QUESTIONS.length}`;
+            document.getElementById('quiz-question-text').innerText = q.question;
+
+            const optionsBox = document.getElementById('quiz-options');
+            optionsBox.innerHTML = '';
+
+            q.options.forEach((optText, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "quiz-opt-btn text-left p-3.5 rounded-xl border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-amber-50 hover:border-amber-300 transition flex items-center justify-between";
+                btn.onclick = () => handleQuizAnswer(idx, btn);
+                btn.innerHTML = `
+                    <span>${optText}</span>
+                    <span class="text-slate-300 font-bold">◯</span>
+                `;
+                optionsBox.appendChild(btn);
+            });
+
+            document.getElementById('quiz-feedback').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+        }
+
+        function handleQuizAnswer(selectedIndex, btnEl) {
+            const q = QUIZ_QUESTIONS[currentQuizIndex];
+            const feedback = document.getElementById('quiz-feedback');
+            const allBtns = document.querySelectorAll('.quiz-opt-btn');
+
+            allBtns.forEach(b => b.disabled = true);
+
+            if (selectedIndex === q.correct) {
+                playSound('correct');
+                quizScore++;
+                btnEl.classList.add('bg-emerald-100', 'border-emerald-500', 'text-emerald-950');
+                feedback.className = "p-3.5 rounded-xl text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-200 block";
+                feedback.innerText = `✅ Зөв хариуллаа! ${q.explanation}`;
+            } else {
+                playSound('wrong');
+                btnEl.classList.add('bg-rose-100', 'border-rose-500', 'text-rose-950');
+                allBtns[q.correct].classList.add('bg-emerald-50', 'border-emerald-400', 'text-emerald-900');
+                feedback.className = "p-3.5 rounded-xl text-xs font-bold bg-rose-50 text-rose-800 border border-rose-200 block";
+                feedback.innerText = `❌ Буруу хариуллаа. Зөв хариулт: "${q.options[q.correct]}". ${q.explanation}`;
+            }
+
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            playSound('click');
+            currentQuizIndex++;
+            if (currentQuizIndex < QUIZ_QUESTIONS.length) {
+                loadQuizQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            document.getElementById('quiz-box').classList.add('hidden');
+            document.getElementById('certificate-box').classList.remove('hidden');
+
+            const scorePercent = Math.round((quizScore / QUIZ_QUESTIONS.length) * 100);
+            document.getElementById('cert-score-display').innerText = `${scorePercent}% (${quizScore}/${QUIZ_QUESTIONS.length})`;
+
+            // Set current date
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('cert-date').innerText = today;
+
+            if (scorePercent >= 80) {
+                playSound('win');
+            }
+        }
+
+        function updateCertName() {
+            const inputVal = document.getElementById('cert-student-name').value;
+            document.getElementById('cert-display-name').innerText = inputVal.trim() !== '' ? inputVal : '[ Сурагчийн нэр ]';
+        }
+
+        function restartQuiz() {
+            playSound('click');
+            startQuiz();
+        }
+    </script>
+</body>
+</html>
